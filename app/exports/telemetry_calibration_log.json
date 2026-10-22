@@ -1,0 +1,8 @@
+{
+  "system": "Weather Report Solutions S.L. - Telemetry Grid",
+  "calibration_cycle": "2026-Q4",
+  "sensors_active": 48,
+  "drift_tolerance_pct": 0.05,
+  "last_verification": "2026-10-15T08:00:00Z",
+  "signature": "SHA256:d8e8fca2dc6451be67c7e1"
+}

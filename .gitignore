@@ -1,0 +1,12 @@
+# Rutas locales excluidas
+tools/
+PATH/
+
+# Archivos y claves locales
+remote_config.txt
+*.pdf
+*.pem
+*.key
+*.log
+.DS_Store
+Thumbs.db
