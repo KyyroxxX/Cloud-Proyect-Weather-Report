@@ -1,6 +1,7 @@
-# Rutas locales excluidas
+# Rutas locales y de apuntes excluidas
 tools/
 PATH/
+PATH_WeatherReport_Legacy/
 
 # Archivos y claves locales
 remote_config.txt
