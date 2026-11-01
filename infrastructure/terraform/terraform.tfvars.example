@@ -1,0 +1,10 @@
+# Variables de despliegue para Weather Report Cloud Security
+aws_region          = "eu-west-1"
+vpc_cidr            = "10.0.0.0/16"
+key_name            = "wr-ssh-key"
+admin_ip            = "0.0.0.0/0" # Reemplazar con tu IP publica real: "X.X.X.X/32"
+instance_type_web   = "t2.micro"
+instance_type_app   = "t2.micro"
+instance_type_data  = "t2.micro"
+instance_type_wazuh = "t3.micro"
+enable_nat_routing  = true

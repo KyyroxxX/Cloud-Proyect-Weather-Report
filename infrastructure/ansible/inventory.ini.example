@@ -1,0 +1,18 @@
+# Inventario de Servidores Weather Report Cloud Security
+# Reemplazar <IP_PUBLICA_NGINX> por el output 'bastion_public_ip' de Terraform
+
+[bastion]
+wr-nginx ansible_host=<IP_PUBLICA_NGINX> ansible_user=ubuntu
+
+[app_servers]
+wr-app ansible_host=10.0.11.10 ansible_user=ubuntu
+
+[db_servers]
+wr-data ansible_host=10.0.21.10 ansible_user=ubuntu
+
+[security_servers]
+wr-wazuh ansible_host=10.0.31.10 ansible_user=ubuntu
+
+[all:vars]
+ansible_ssh_private_key_file=~/.ssh/wr-ssh-key.pem
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q ubuntu@<IP_PUBLICA_NGINX> -i ~/.ssh/wr-ssh-key.pem"'

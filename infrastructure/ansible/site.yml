@@ -1,0 +1,90 @@
+---
+- name: Hardening Base y Herramientas Comunes en Todos los Nodos
+  hosts: all
+  become: yes
+  tasks:
+    - name: Actualizar repositorios del sistema
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Instalar paquetes esenciales de seguridad y administracion
+      apt:
+        name:
+          - ufw
+          - fail2ban
+          - curl
+          - git
+          - htop
+          - net-tools
+          - ca-certificates
+        state: present
+
+    - name: Configurar parametros sysctl de proteccion de red
+      sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.val }}"
+        state: present
+        reload: yes
+      loop:
+        - { key: 'net.ipv4.tcp_syncookies', val: '1' }
+        - { key: 'net.ipv4.conf.all.rp_filter', val: '1' }
+        - { key: 'net.ipv4.icmp_echo_ignore_broadcasts', val: '1' }
+
+- name: Configuracion del Servidor Web Reverse Proxy (wr-lab-nginx)
+  hosts: bastion
+  become: yes
+  tasks:
+    - name: Instalar y verificar servicio Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Asegurar que el servicio Nginx esta habilitado y en ejecucion
+      systemctl:
+        name: nginx
+        state: started
+        enabled: yes
+
+- name: Configuracion del Servidor de Aplicaciones (wr-lab-app)
+  hosts: app_servers
+  become: yes
+  tasks:
+    - name: Instalar entorno PHP 8.3 y extensiones necesarias
+      apt:
+        name:
+          - php8.3-fpm
+          - php8.3-cli
+          - php8.3-pgsql
+          - php8.3-curl
+          - php8.3-mbstring
+          - php8.3-xml
+          - php8.3-zip
+        state: present
+
+    - name: Asegurar que php8.3-fpm esta en ejecucion
+      systemctl:
+        name: php8.3-fpm
+        state: started
+        enabled: yes
+
+- name: Configuracion de la Capa de Datos (wr-lab-data)
+  hosts: db_servers
+  become: yes
+  tasks:
+    - name: Instalar motor PostgreSQL y Redis
+      apt:
+        name:
+          - postgresql
+          - postgresql-contrib
+          - redis-server
+        state: present
+
+    - name: Asegurar que PostgreSQL y Redis estan en ejecucion
+      systemctl:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop:
+        - postgresql
+        - redis-server
